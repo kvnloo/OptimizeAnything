@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+**/target/
+runs/
+work/
+.DS_Store
