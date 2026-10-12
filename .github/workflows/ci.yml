@@ -1,0 +1,36 @@
+name: Pilot correctness
+on:
+  pull_request:
+  push:
+    branches: [main, 'feat/**']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.85.1 --profile minimal --component rustfmt
+          rustup default 1.85.1
+      - name: Harness and upstream reference tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Rust parity, development corpus
+        run: python3 optimizeanything.py check --max-seconds 180 --output runs/ci-check.json
+      - name: Rust parity, additional public seed (not hidden grading)
+        run: python3 optimizeanything.py check --seed 872349 --random-cases 10000 --output runs/ci-additional.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pilot-receipts
+          path: runs/*.json

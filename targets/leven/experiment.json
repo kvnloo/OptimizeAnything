@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "id": "leven-v4-rust",
+  "mode": "translation",
+  "output_contract": "uint-lines-v1",
+  "source": {
+    "repository": "https://github.com/sindresorhus/leven",
+    "tag": "v4.0.0",
+    "commit": "447058af4df87e45724ad608c8892eb263aa1276",
+    "index_js_git_blob": "9eaec1f5531441e4141312e038a8b1be9d4fd7e5",
+    "author": "Sindre Sorhus and leven contributors",
+    "license": "MIT"
+  },
+  "candidate_dir": "targets/leven/rust",
+  "integrity": {
+    "targets/leven/vendor/index.mjs": "2fda697302fb835b2c7f4fbf06923ffb3fe23f2ed4da3b09116ea42af057a64f",
+    "targets/leven/vendor/LICENSE": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "targets/leven/oracle.mjs": "6af277adc3efab2acdabd6f6255458f5acb99dfc2e15b01928e7b11ba5bff26d",
+    "targets/leven/cases.py": "6cc9d7a576a54ea2887b2067adf532b10c49ef5d9b5e4e9c1af8206c83f98fae",
+    "targets/leven/CONTRACT.md": "80a1cf2dcd956511184610637ded924f1070ea5ecc141225de44e561e42aa1a0",
+    "tests/test_runner.py": "0a61150cb5198e68b3b0d5c149316fdfd1544857c3b87d5b5c576b334c5ff925"
+  },
+  "build": [
+    [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "{candidate}/Cargo.toml",
+      "--",
+      "--check"
+    ],
+    [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "{candidate}/Cargo.toml"
+    ],
+    [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "{candidate}/Cargo.toml"
+    ],
+    [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "{candidate}/Cargo.toml"
+    ]
+  ],
+  "workload": [
+    "{python}",
+    "{root}/targets/leven/cases.py",
+    "--seed",
+    "{seed}",
+    "--random-cases",
+    "{random_cases}",
+    "--suite",
+    "{suite}"
+  ],
+  "reference": [
+    "node",
+    "{root}/targets/leven/oracle.mjs"
+  ],
+  "candidate": [
+    "{candidate}/target/release/oa-leven"
+  ],
+  "versions": {
+    "node": [
+      "node",
+      "--version"
+    ],
+    "rust": [
+      "rustc",
+      "--version",
+      "--verbose"
+    ],
+    "cargo": [
+      "cargo",
+      "--version"
+    ]
+  }
+}
